@@ -131,7 +131,7 @@ jobs:
       run:
         working-directory: ./pse-backend-demo/
     name: Workflow Summary
-    needs: [setup, quality, build, test, docker]
+    needs: [setup, build, test, deploy, docker]
     runs-on: ubuntu-latest
     if: always() # Run even if previous jobs fail
     steps:
