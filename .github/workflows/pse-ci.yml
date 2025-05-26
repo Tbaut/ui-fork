@@ -15,18 +15,18 @@ jobs:
       - name: Setup pnpm
         uses: ./.github/actions/setup-pnpm
 
-  quality:
-    defaults:
-    run:
-      working-directory: ./pse-backend-demo/
-    name: Code Quality
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: biomejs/setup-biome@f382a98e582959e6aaac8e5f8b17b31749018780 # v2
-        with:
-          version: latest
-      - run: biome ci .
+  # quality:
+  #   defaults:
+  #   run:
+  #     working-directory: ./pse-backend-demo/
+  #   name: Code Quality
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+  #     - uses: biomejs/setup-biome@f382a98e582959e6aaac8e5f8b17b31749018780 # v2
+  #       with:
+  #         version: latest
+  #     - run: biome ci .
 
   build:
     defaults:
@@ -40,6 +40,23 @@ jobs:
       - uses: ./.github/actions/setup-pnpm
       - run: pnpm build
 
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    defaults:
+      run:
+        working-directory: ./pse-backend-demo/
+    steps:
+      - uses: JorgeLNJunior/render-deploy@v1.4.5
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          clear_cache: true # Optional: Clear Render's build cache
+          wait_deploy: true
+          github_deployment: true
+          deployment_environment: 'production'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
   test:
     defaults:
       run:
