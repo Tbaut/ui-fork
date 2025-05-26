@@ -14,22 +14,18 @@ runs:
         echo "node=$NODE_VERSION" >> $GITHUB_OUTPUT
 
     - name: Setup pnpm
-      defaults:
-        run:
-          working-directory: ./pse-backend-demo/
       uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4
       with:
         version: ${{ steps.versions.outputs.pnpm }}
 
     - name: Get pnpm store directory
       shell: bash
+      working-directory: ./pse-backend-demo/
       run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
     - name: Restore pnpm cache
       uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
-      defaults:
-        run:
-          working-directory: ./pse-backend-demo/
+      working-directory: ./pse-backend-demo/
       with:
         path: |
           ${{ env.STORE_PATH }}
@@ -40,8 +36,6 @@ runs:
           ${{ runner.os }}-node-${{ steps.versions.outputs.node }}-pnpm-
 
     - name: Install dependencies
-      defaults:
-        run:
-          working-directory: ./pse-backend-demo/
       shell: bash
+      working-directory: ./pse-backend-demo/
       run: pnpm install --frozen-lockfile
