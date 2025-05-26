@@ -44,6 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       deployments: write
+    needs: build
     defaults:
       run:
         working-directory: ./pse-backend-demo/
